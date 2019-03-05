@@ -7,6 +7,7 @@
 
 <script src="lib/Command-Executor.js"></script>
 <script src="commands/Stock-Price-Changed.js"></script>
+<script src="commands/Stock-Price-Rejected.js"></script>
 
 <dom-module id="pattern-app">
   <template>
@@ -42,12 +43,22 @@
           transports: ['websocket']
         })
 
-        this.commandExecutor = new CommandExecutor(this.socket, [
-          new StockPriceChanged(
-            this.$.stockPriceInput,
-            this.$.toast,
-            this.$.stockList
-          )
+        const stockPriceRejected = new StockPriceRejected(
+          this.socket,
+          this.$.toast
+        )
+
+        const stockPriceChanged = new StockPriceChanged(
+          this.socket,
+          this.$.stockPriceInput,
+          this.$.toast,
+          this.$.stockList,
+          stockPriceRejected
+        )
+
+        this.commandExecutor = new CommandExecutor([
+          stockPriceRejected,
+          stockPriceChanged
         ])
       }
     })

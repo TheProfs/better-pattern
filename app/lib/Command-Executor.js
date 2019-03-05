@@ -1,32 +1,36 @@
 'use strict'
 
 class CommandExecutor {
-  constructor(socket, commands) {
-    this.socket = socket
-    this.socket.on('paper-event', event => {
-      if (this[event.name])
-        this[event.name].executeRemote(event.data)
-    })
-
-    commands.forEach(command => {
-      this[command.constructor.name] = command
-
-      command.emit = (data, options) => {
-        this.socket.emit('paper-event', Object.assign({
-          name: command.constructor.name,
-          data: data,
-          options
-        }))
-      }
-    })
+  constructor(commands) {
+    this.commands = commands
 
     fetch('/events', { mode: 'cors' })
       .then(res => res.json())
       .then(async events => {
         for (const event of events) {
-          if (this[event.name])
-            await this[event.name].executeStored(event.data)
+          const command = this.commands
+            .find(command => command.constructor.name === event.name)
+
+          if (command) command.executeStored(event.data)
         }
       })
+  }
+}
+
+class Command {
+  constructor(socket) {
+    this.socket = socket
+    this.socket.on('paper-event', event => {
+      if (this.constructor.name === event.name)
+        this.executeRemote(event.data)
+    })
+  }
+
+  emit(data, options) {
+    this.socket.emit('paper-event', Object.assign({
+      name: this.constructor.name,
+      data: data,
+      options
+    }))
   }
 }
