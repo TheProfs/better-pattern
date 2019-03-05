@@ -1,0 +1,41 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<dom-module id="stock-list">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <ul>
+      <template is="dom-repeat" items="{{prices}}">
+        <li>[[item]]</li>
+      </template>
+    </ul>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'stock-list',
+
+      properties: {
+        prices: {
+          type: Array,
+          value: function() {
+            return [ 14.55, 13.22, 20.11 ]
+          }
+        }
+      },
+
+      attached: function() {
+        window.stockList = this
+      },
+
+      addPrice: function(price) {
+        this.push('prices', price)
+      }
+    })
+  </script>
+</dom-module>

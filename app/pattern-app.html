@@ -1,15 +1,26 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="stock-price-input.html">
+<link rel="import" href="stock-list.html">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+
+<script src="lib/Command-Executor.js"></script>
+<script src="commands/Stock-Price-Changed.js"></script>
 
 <dom-module id="pattern-app">
   <template>
     <style>
       :host {
         display: block;
+        font-family: sans-serif;
       }
     </style>
 
-    <h1> Hello [[text]] </h1>
+    <h1> Eurolife Stock Price </h1>
+    <stock-price-input id="stockPriceInput"></stock-price-input>
+    <stock-list id="stockList"></stock-list>
+    <paper-toast id="toast"></paper-toast>
   </template>
 
   <script>
@@ -21,7 +32,7 @@
         text: {
           type: String,
           value: 'World'
-        },
+        }
       },
 
       attached: function() {
@@ -30,6 +41,14 @@
           reconnection: true,
           transports: ['websocket']
         })
+
+        this.commandExecutor = new CommandExecutor(io, [
+          new StockPriceChanged(
+            this.$.stockPriceInput,
+            this.$.toast,
+            this.$.stockList
+          )
+        ])
 
         this.socket.emit('paper-event', { hello: 'world' })
         this.socket.on('paper-event', event => {

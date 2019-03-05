@@ -1,0 +1,47 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<dom-module id="stock-price-input">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      input {
+        font-size: 24px;
+      }
+    </style>
+
+    <input id="input" placeholder="Add Price"></input>
+    <button on-tap="_addPrice">Add Price</button>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'stock-price-input',
+
+      properties: {
+        prices: {
+          type: Array,
+          value: function() {
+            return [ 14.55, 13.22, 20.11 ]
+          }
+        }
+      },
+
+      attached: function() {
+        window.stockList = this
+      },
+
+      addPrice: function(price) {
+        this.push('prices', price)
+      },
+
+      _addPrice: function() {
+        const price = this.$.input.value
+        this.fire('stock-price-changed', { price })
+      }
+    })
+  </script>
+</dom-module>
