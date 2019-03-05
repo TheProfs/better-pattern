@@ -8,6 +8,9 @@ class StockPriceChanged {
 
     this.stockPriceInput.addEventListener('stock-price-changed', e => {
       this.execute(e.detail.price)
+      this.emit(e.detail.price, {
+        store: true
+      })
     })
   }
 
@@ -15,5 +18,13 @@ class StockPriceChanged {
     this.stockList.addPrice(price)
     this.toast.text = `Stock Price changed to ${price}`
     this.toast.open()
+  }
+
+  executeRemote(price) {
+    this.execute(price)
+  }
+
+  executeStored(price) {
+    this.stockList.addPrice(price)
   }
 }

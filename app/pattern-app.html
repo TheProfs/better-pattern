@@ -42,18 +42,13 @@
           transports: ['websocket']
         })
 
-        this.commandExecutor = new CommandExecutor(io, [
+        this.commandExecutor = new CommandExecutor(this.socket, [
           new StockPriceChanged(
             this.$.stockPriceInput,
             this.$.toast,
             this.$.stockList
           )
         ])
-
-        this.socket.emit('paper-event', { hello: 'world' })
-        this.socket.on('paper-event', event => {
-          console.log('paper-event-received', event)
-        })
       }
     })
   </script>
