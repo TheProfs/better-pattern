@@ -1,0 +1,20 @@
+{
+  "name": "better-pattern",
+  "description": "Collaborative patterns playground",
+  "main": "index.js",
+  "authors": [
+    "nicholaswmin <nik.kyriakides@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/TheProfs/better-pattern",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "1.4.0"
+  }
+}

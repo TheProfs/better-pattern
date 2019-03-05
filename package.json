@@ -1,0 +1,24 @@
+{
+  "name": "better-pattern",
+  "version": "0.1.0",
+  "description": "Collaborative patterns playground",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheProfs/better-pattern.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TheProfs/better-pattern/issues"
+  },
+  "homepage": "https://github.com/TheProfs/better-pattern#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "socket.io": "^2.2.0"
+  }
+}
