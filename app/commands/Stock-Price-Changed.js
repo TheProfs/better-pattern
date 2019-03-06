@@ -10,36 +10,28 @@ class StockPriceChanged extends Command {
     this.StockPriceRejected = StockPriceRejected
 
     this.stockPriceInput.addEventListener('stock-price-changed', e => {
-      this._handleLocalStockPriceChange(e.detail.price)
+      this.execute(e.detail.price, { executeRemote: true, store: true })
     })
   }
 
-  execute(price) {
-    this.run(price)
-    this.emit(price, {
-      store: true
-    })
+  execute(price, options = {}) {
+    if (+price > 40) {
+      return this.StockPriceRejected.execute(price, { executeRemote: true })
+    }
+
+    this.stockList.addPrice(price)
+    this.toast.text = `Stock Price changed to ${price}`
+    this.toast.open()
+
+    if (options.executeRemote)
+      this.emit(price, { store: options.store })
   }
 
   executeRemote(price) {
-    this.run(price)
+    this.execute(price)
   }
 
   executeStored(price) {
     this.stockList.addPrice(price)
-  }
-
-  run(price) {
-    this.stockList.addPrice(price)
-    this.toast.text = `Stock Price changed to ${price}`
-    this.toast.open()
-  }
-
-  _handleLocalStockPriceChange(price) {
-    if (+price > 40) {
-      return this.StockPriceRejected.execute(price)
-    }
-
-    this.execute(price)
   }
 }
